@@ -1,0 +1,7 @@
+@import url('../page/__content/page__content.css');
+@import url('../page/__section/page__section.css');
+
+.page {
+  background-image: url('/src/images/image.png');
+  background-size: cover;
+}
