@@ -7,7 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Природные пейзажи</title>
+    <title>Landscapes</title>
     <!-- <link rel="stylesheet" href="./index.css" /> -->
   </head>
   <body class="page">
@@ -24,10 +24,10 @@
           <img class="profile__image" src="" alt="">
           <div class="profile__info">
             <h1 class="profile__title"></h1>
-            <button class="profile__edit-button" type="button"></button>
+            <button class="profile__edit-button" type="button" hidden></button>
             <p class="profile__description">ставь лайк ниже</p>
           </div>
-          <button class="profile__add-button" type="button" aria-label="Добавить карточку"></button>
+          <button class="profile__add-button" type="button" aria-label="Добавить карточку" hidden></button>
         </section>
         <section class="places page__section">
           <ul class="places__list"></ul>
@@ -54,13 +54,8 @@
       <div class="popup" id="addCardPopup">
         <div class="popup__content">
           <button type="button" class="popup__close" aria-label="Закрыть"></button>
-          <h3 class="popup__title">Новое место</h3>
+          <h3 class="popup__title">Описание картины</h3>
           <form class="popup__form" name="new-place" id="addCardForm">
-            <input type="text" name="txt_name" id="place-name" class="popup__input popup__input_type_card-name" placeholder="Название" required minlength="2" maxlength="30" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-            <span id="place-name-error" class="popup__error"></span>
-            <input type="url" name="txt_link" id="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
-            <span id="link-error" class="popup__error"></span>
-            <button type="submit" class="button popup__button">Создать</button>
           </form>
         </div>
       </div>
@@ -96,9 +91,9 @@
     <div class="popup" id="avatarModalPopup">
       <div class="popup__content">
           <button type="button" class="popup__close" aria-label="Закрыть"></button>
-          <h3 class="popup__title">ff</h3>
+          <h3 class="popup__title">Описание картины</h3>
           <div class="popup__form" name="edit-avatar" id="editAvatarForm">
-              <p  type="text" name="avatar" id="avatar" class="popup__text" >text</p>
+              <p  type="text" name="avatar" id="avatar" class="popup__text" ></p>
           </div>
       </div>
   </div>

@@ -1,7 +1,7 @@
 .profile__info {
   display: grid;
   grid-template-areas: "title button"
-  "description description";
+  "description descr";
   grid-template-columns: minmax(auto, 245px) auto;
   grid-gap: 9px 17px;
 }

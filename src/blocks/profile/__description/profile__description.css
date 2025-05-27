@@ -1,5 +1,6 @@
 .profile__description {
-  font-size: 18px;
+  font-family: cursive;
+  font-size: 25px;
   font-weight: 900;
   line-height: 22px;
   grid-area: description;
