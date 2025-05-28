@@ -9,20 +9,22 @@ import {
   popupImage,
   popupCaption,
   avatarImage,
-  popupList,
 } from "./scripts/constans.js";
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // ======== Функции =========
 function openModal(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", handleEscapeClose);
 }
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", handleEscapeClose);
 }
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 function handleEscapeClose(event) {
   if (event.key === "Escape") {
     // Имя клавиши на которую я нажал log попробовать
@@ -33,6 +35,34 @@ function handleEscapeClose(event) {
   }
 }
 
+// ======== Пример замыкания: счетчик лайков =========
+// ================= Function Declaration (Объявления функции) ===================================================================== //
+function createLikeCounter() {
+  let likeCount = 0; // Эта переменная будет "замкнута" внутри возвращаемой функции
+
+  return function (cardElement) {
+    likeCount++;
+    // console.log(`Карточка получила ${likeCount} лайк(ов)`);
+
+    // Можем также обновить UI
+    const counterElement = cardElement.querySelector(".card__like-counter");
+    if (counterElement) {
+      counterElement.textContent = likeCount;
+    } else {
+      const newCounter = document.createElement("span");
+      newCounter.classList.add("card__like-counter");
+      newCounter.textContent = likeCount;
+      cardElement.querySelector(".card__like-button").append(newCounter);
+    }
+
+    return likeCount;
+  };
+}
+
+// Создаём экземпляр счётчика
+const likeCounter = createLikeCounter();
+
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // === функция создания карточки и внесения в нее различных данных ==============
 function createCard(
   cardData,
@@ -40,7 +70,6 @@ function createCard(
   handleDeleteCard,
   handleLikeClick
 ) {
-
   // создаю функцию "createCard" с параметрами данные карточек и удаление карточек
   const cardTemplate = document.getElementById("card-template"); // создаю переменную "templateElement" для поиска шаблона в html(верстке)
   const CARDS = cardTemplate.content.cloneNode(true).firstElementChild; // создаю переменную "CARDS" для клонирования карточек на страницу
@@ -53,59 +82,35 @@ function createCard(
   imageCards.src = cardData.link;
   imageCards.alt = cardData.alt;
   cardTitle.textContent = cardData.name;
-  popupList.textContent = cardData.text;
 
+  // ================= Function Declaration (Объявления функции) ===================================================================== //
+  // Используем замыкание
   likeButton.addEventListener("click", () => {
+    likeCounter(CARDS); // передаём карточку в счётчик
     handleLikeClick(likeButton, cardData);
   });
 
+  // ================= Function Declaration (Объявления функции) ===================================================================== //
   deleteButton.addEventListener("click", () => {
     handleDeleteCard(CARDS);
   });
 
+  // ================= Function Declaration (Объявления функции) ===================================================================== //
   imageCards.addEventListener("click", () => {
     handleCardClick(cardData.link, cardData.name, cardData.name);
   });
 
-
-
-
-  // Добавляем обработчик для кнопки редактирования (если есть)
-  if (profileEditButton) {
-    profileEditButton.addEventListener("click", () => {
-      // Находим попап и его текстовое поле (если ещё не определено)
-      const popupList = document.querySelector('.popup__text'); // или другой селектор
-      if (popupList) {
-        popupList.textContent = cardData.text;
-      }
-    });
-  }
   return CARDS;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//* Пример с кликом по блокам страницы *//
+// =========== Пример с кликом по блокам страницы //
 
 // const map = {
 //   profile__image: "я кликнул по аватару",
 //   card__image: "я кликнул по фото",
 //   content: "я кликнул по браузеру",
 //   popup__close: "я кликаю по закрытию",
-//   "card__like-button": "я кликаю по лайку",
+//   "card__like-button": "я кликаю по лайку",А
 // };
 
 // const body = document.querySelector("body");
@@ -120,19 +125,9 @@ const archiv = {
   profileDescription: "ставь лайк ниже",
 };
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // ======= функция для лайка карточки
-let activeCard = null;
-
-// Убедимся, что слушатель у profileEditButton повешен один раз
-document.addEventListener("DOMContentLoaded", function () {
-  const profileEditButton = document.querySelector(".profile__edit-button");
-
-  if (profileEditButton) {
-    profileEditButton.addEventListener("click", function () {
-      openModal(avatarModalPopup);
-    });
-  }
-});
+let activeCard = null; // Храним данные активной карточки
 
 function likeCard(likeButton, cardData) {
   const isActive = likeButton.classList.contains("card__like-button_is-active");
@@ -143,8 +138,8 @@ function likeCard(likeButton, cardData) {
     btn.classList.remove("card__like-button_is-active");
   });
 
-  // Если клик по уже активной карточке — снимаем лайк
   if (isActive) {
+    // Если лайк снят
     avatarImage.src = archiv.avatarImage;
     profileEditButton.hidden = true;
     profileName.textContent = "";
@@ -153,29 +148,29 @@ function likeCard(likeButton, cardData) {
     return;
   }
 
-  // Включаем лайк только на этой карточке
+  // Ставим лайк и сохраняем карточку
   likeButton.classList.add("card__like-button_is-active");
-
-  // Обновляем данные профиля
-  if (avatarImage && cardData?.link) {
-    avatarImage.src = cardData.link;
-  }
-
-  if (profileEditButton) {
-    profileEditButton.hidden = false;
-  }
-
-  if (profileName) {
-    profileName.textContent = "описание картины ==>";
-  }
-
-  if (profileDescription && cardData?.name) {
-    profileDescription.textContent = cardData.name;
-  }
-
-  activeCard = cardData;
+  avatarImage.src = cardData.link;
+  profileEditButton.hidden = false;
+  profileName.textContent = "описание картины ==>";
+  profileDescription.textContent = cardData.name;
+  activeCard = cardData; // Сохраняем данные карточки
 }
 
+// ================= Function Expression (Функциональное выражение) ===================================================================== //
+profileEditButton.addEventListener("click", function () {
+  // Находим элементы в попапе
+  const popupText = document.querySelector("#avatarModalPopup .popup__text");
+  const popupTitle = document.querySelector("#avatarModalPopup .popup__title");
+
+  if (popupText && popupTitle) {
+    popupText.textContent = activeCard.text;
+    popupTitle.textContent = activeCard.name;
+  }
+  openModal(avatarModalPopup);
+});
+
+// ================= Arrow Function (Стрелочные функции) ===================================================================== //
 // =======  функции по закрытию попапов (клик по крестику и  рядом)
 const closeModalOut = (popup) => {
   closeModal(popup);
@@ -212,6 +207,7 @@ const closeModalOut = (popup) => {
   }
 };
 
+// ================= Arrow Function (Стрелочные функции) ===================================================================== //
 const setCloseListener = () => {
   const popupList = Array.from(document.querySelectorAll(".popup"));
   popupList.forEach((popup) => {
@@ -228,11 +224,13 @@ const setCloseListener = () => {
 
 setCloseListener();
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // ======  функция для удаления карточки
 function deleteCard(CARDS) {
   CARDS.remove();
 }
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // ======= функция для открытия картинки и попапов при клики
 function handleCardClick(link, alt, name) {
   popupImage.src = link;
@@ -241,30 +239,13 @@ function handleCardClick(link, alt, name) {
   openModal(imagePopup);
 }
 
-// // при клике на "плюс" октрываю форму для заполнения карточек
-// profileAddButton.addEventListener("click", () => {
-//   openModal(addCardPopup);
-// });
-
-// при отправки формы "плюс" сохраняю текст (в браузере и форме) который был в заполненных полях
-// addCardForm.addEventListener("submit", (evt) => {
-//   evt.preventDefault();
-//   const newCardData = {
-//     name: (cardNameInput.value = "запрос ушел"),
-//     link: (cardLinkInput.value = "ожидаем!"),
-//   };
-
-//   addCard(newCardData, placesList, handleCardClick, deleteCard);
-//   cardNameInput.value = "";
-//   cardLinkInput.value = "";
-//   closeModal(addCardPopup);
-// });
-
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 // ===== функция для плавное открывание попапов
 document
   .querySelectorAll(".popup")
   .forEach((popup) => popup.classList.add("popup_is-animated"));
 
+// ================= Function Declaration (Объявления функции) ===================================================================== //
 function addCard(
   cardData,
   placesList,
